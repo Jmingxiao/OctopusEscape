@@ -14,7 +14,7 @@ public class Hook : MonoBehaviour {
     public Camera m_camera;
 
     [Header("Transform Reference:")]
-    public Transform holder;
+    Transform player;
     public Transform pivot;
     public Transform hookPoint;
 
@@ -49,16 +49,19 @@ public class Hook : MonoBehaviour {
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
+
+
     private void Start()
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
-
+        hookPoint = gameObject.transform;
+        player = pivot.parent;
     }
 
     private void Update()
     {
-        Debug.Log("GrappleRope: " + grappleRope.enabled);
+        
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             SetGrapplePoint();
@@ -79,9 +82,9 @@ public class Hook : MonoBehaviour {
             {
                 if (launchType == LaunchType.Transform_Launch)
                 {
-                    Vector2 hookPointDistance = hookPoint.position - holder.localPosition;
+                    Vector2 hookPointDistance = hookPoint.position - player.localPosition;
                     Vector2 targetPos = grapplePoint - hookPointDistance;
-                    holder.position = Vector2.Lerp(holder.position, targetPos, Time.deltaTime * launchSpeed);
+                    player.position = Vector2.Lerp(player.position, targetPos, Time.deltaTime * launchSpeed);
                 }
             }
         }
@@ -90,11 +93,17 @@ public class Hook : MonoBehaviour {
             grappleRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
+            PlayerController.Instance.m_state = PlayerController.States.None;
         }
         else
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             RotateHook(mousePos, true);
+        }
+
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            launchToPoint = !launchToPoint;
         }
     }
 
@@ -106,6 +115,7 @@ public class Hook : MonoBehaviour {
         if (rotateOverTime && allowRotationOverTime)
         {
             pivot.rotation = Quaternion.Lerp(pivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
+        
         }
         else
         {
@@ -119,13 +129,21 @@ public class Hook : MonoBehaviour {
         if (Physics2D.Raycast(hookPoint.position, distanceVector.normalized))
         {
             RaycastHit2D _hit = Physics2D.Raycast(hookPoint.position, distanceVector.normalized);
-            if (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll)
-            {
+            var go = _hit.transform.gameObject;
+            if (go.layer == grappableLayerNumber || grappleToAll)
+            {   
                 if (Vector2.Distance(_hit.point, hookPoint.position) <= maxDistance || !hasMaxDistance)
                 {
                     grapplePoint = _hit.point;
                     grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
                     grappleRope.enabled = true;
+                    PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
+
+                    if(go.layer == 7)
+                    {     
+                        go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 3, ForceMode2D.Impulse);
+                    }
+
                 }
             }
         }
@@ -157,7 +175,7 @@ public class Hook : MonoBehaviour {
                 case LaunchType.Physics_Launch:
                     m_springJoint2D.connectedAnchor = grapplePoint;
 
-                    Vector2 distanceVector = hookPoint.position - holder.position;
+                    Vector2 distanceVector = hookPoint.position - player.position;
 
                     m_springJoint2D.distance = distanceVector.magnitude;
                     m_springJoint2D.frequency = launchSpeed;
