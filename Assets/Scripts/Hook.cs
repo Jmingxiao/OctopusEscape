@@ -58,7 +58,6 @@ public class Hook : MonoBehaviour {
 
     private void Update()
     {
-        Debug.Log("GrappleRope: " + grappleRope.enabled);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             SetGrapplePoint();
