@@ -7,6 +7,15 @@ public class Health : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
+    private void Update() {
+        // Check if the player presses the "H" key
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            // Reduce the player's health by 10
+            TakeDamage(10);
+        }
+    }
+
     private void Start()
     {
         currentHealth = maxHealth;
