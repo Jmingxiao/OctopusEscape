@@ -16,7 +16,7 @@ public class Hook : MonoBehaviour {
     [Header("Transform Reference:")]
     public Transform holder;
     public Transform pivot;
-    public Transform firePoint;
+    public Transform hookPoint;
 
     [Header("Physics Reference:")]
     public SpringJoint2D m_springJoint2D;
@@ -79,8 +79,8 @@ public class Hook : MonoBehaviour {
             {
                 if (launchType == LaunchType.Transform_Launch)
                 {
-                    Vector2 firePointDistance = firePoint.position - holder.localPosition;
-                    Vector2 targetPos = grapplePoint - firePointDistance;
+                    Vector2 hookPointDistance = hookPoint.position - holder.localPosition;
+                    Vector2 targetPos = grapplePoint - hookPointDistance;
                     holder.position = Vector2.Lerp(holder.position, targetPos, Time.deltaTime * launchSpeed);
                 }
             }
@@ -116,12 +116,12 @@ public class Hook : MonoBehaviour {
     void SetGrapplePoint()
     {
         Vector2 distanceVector = m_camera.ScreenToWorldPoint(Input.mousePosition) - pivot.position;
-        if (Physics2D.Raycast(firePoint.position, distanceVector.normalized))
+        if (Physics2D.Raycast(hookPoint.position, distanceVector.normalized))
         {
-            RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, distanceVector.normalized);
+            RaycastHit2D _hit = Physics2D.Raycast(hookPoint.position, distanceVector.normalized);
             if (_hit.transform.gameObject.layer == grappableLayerNumber || grappleToAll)
             {
-                if (Vector2.Distance(_hit.point, firePoint.position) <= maxDistance || !hasMaxDistance)
+                if (Vector2.Distance(_hit.point, hookPoint.position) <= maxDistance || !hasMaxDistance)
                 {
                     grapplePoint = _hit.point;
                     grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
@@ -157,7 +157,7 @@ public class Hook : MonoBehaviour {
                 case LaunchType.Physics_Launch:
                     m_springJoint2D.connectedAnchor = grapplePoint;
 
-                    Vector2 distanceVector = firePoint.position - holder.position;
+                    Vector2 distanceVector = hookPoint.position - holder.position;
 
                     m_springJoint2D.distance = distanceVector.magnitude;
                     m_springJoint2D.frequency = launchSpeed;
@@ -173,10 +173,10 @@ public class Hook : MonoBehaviour {
 
     private void OnDrawGizmosSelected()
     {
-        if (firePoint != null && hasMaxDistance)
+        if (hookPoint != null && hasMaxDistance)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(firePoint.position, maxDistance);
+            Gizmos.DrawWireSphere(hookPoint.position, maxDistance);
         }
     }
 

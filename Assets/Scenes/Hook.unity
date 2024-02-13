@@ -398,7 +398,7 @@ MonoBehaviour:
   m_camera: {fileID: 936067640}
   holder: {fileID: 172710426}
   pivot: {fileID: 1736453946}
-  firePoint: {fileID: 1896944288}
+  hookPoint: {fileID: 263473077}
   m_springJoint2D: {fileID: 172710423}
   m_rigidbody: {fileID: 172710424}
   rotateOverTime: 1

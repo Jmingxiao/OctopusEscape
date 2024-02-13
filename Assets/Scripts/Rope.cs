@@ -48,7 +48,7 @@ public class HookRope : MonoBehaviour {
     {
         for (int i = 0; i < precision; i++)
         {
-            m_lineRenderer.SetPosition(i, grapplingHook.firePoint.position);
+            m_lineRenderer.SetPosition(i, grapplingHook.hookPoint.position);
         }
     }
 
@@ -100,8 +100,8 @@ public class HookRope : MonoBehaviour {
         {
             float delta = (float)i / ((float)precision - 1f);
             Vector2 offset = Vector2.Perpendicular(grapplingHook.grappleDistanceVector).normalized * ropeAnimationCurve.Evaluate(delta) * waveSize;
-            Vector2 targetPosition = Vector2.Lerp(grapplingHook.firePoint.position, grapplingHook.grapplePoint, delta) + offset;
-            Vector2 currentPosition = Vector2.Lerp(grapplingHook.firePoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
+            Vector2 targetPosition = Vector2.Lerp(grapplingHook.hookPoint.position, grapplingHook.grapplePoint, delta) + offset;
+            Vector2 currentPosition = Vector2.Lerp(grapplingHook.hookPoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
 
             m_lineRenderer.SetPosition(i, currentPosition);
         }
@@ -109,7 +109,7 @@ public class HookRope : MonoBehaviour {
 
     void DrawRopeNoWaves()
     {
-        m_lineRenderer.SetPosition(0, grapplingHook.firePoint.position);
+        m_lineRenderer.SetPosition(0, grapplingHook.hookPoint.position);
         m_lineRenderer.SetPosition(1, grapplingHook.grapplePoint);
     }
 }
