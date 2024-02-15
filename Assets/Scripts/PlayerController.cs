@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private LayerMask groundLayer;
     [SerializeField]private Transform groundCheck;
+    [SerializeField] private Transform sprite;
 
     public enum States
     {
@@ -70,7 +71,15 @@ public class PlayerController : MonoBehaviour
 
 
     private void FixedUpdate() {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        switch(m_state)
+       {
+            case States.None:
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            break;
+            case States.IsGrappling:
+            break;
+       }
+        
     }
 
     private bool IsGround()
@@ -83,9 +92,9 @@ public class PlayerController : MonoBehaviour
         if(horizontal > 0 && !isfacingRight || horizontal < 0 && isfacingRight)
         {
             isfacingRight = !isfacingRight;
-            Vector3 theScale = transform.localScale;
+            Vector3 theScale = sprite.localScale;
             theScale.x *= -1;
-            transform.localScale = theScale;
+            sprite.localScale = theScale;
         }
     }
 
