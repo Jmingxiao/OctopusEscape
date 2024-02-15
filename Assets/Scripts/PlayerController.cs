@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public bool HasJumping { get; set;}
     private float speed = 10.0f;
     private float horizontal;
     private float jumpPower = 10.0f;
-
+    private bool hasjumping = false;
     private bool isfacingRight = true;
 
     private Rigidbody2D rb;
@@ -46,18 +48,21 @@ public class PlayerController : MonoBehaviour
        {
             case States.None:
             horizontal = Input.GetAxis("Horizontal");
-            if(Input.GetButtonDown("Jump") && IsGround())
+            if(Input.GetButtonDown("Jump") && (IsGround()|| HasJumping))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
             }
             if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
             {
+                hasjumping = false;
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
             Flip();
 
             break;
             case States.IsGrappling:
+            horizontal = Input.GetAxis("Horizontal");
+            rb.AddForce(new Vector2(horizontal*0.1f, 0));
             break;
        }
     }

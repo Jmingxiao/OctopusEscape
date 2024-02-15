@@ -61,7 +61,7 @@ public class Hook : MonoBehaviour {
 
     private void Update()
     {
-        
+        launchToPoint = !Input.GetKey(KeyCode.LeftControl);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             SetGrapplePoint();
@@ -103,7 +103,7 @@ public class Hook : MonoBehaviour {
 
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
-            launchToPoint = !launchToPoint;
+            //launchToPoint = !launchToPoint;
         }
     }
 
@@ -115,7 +115,6 @@ public class Hook : MonoBehaviour {
         if (rotateOverTime && allowRotationOverTime)
         {
             pivot.rotation = Quaternion.Lerp(pivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
-        
         }
         else
         {
