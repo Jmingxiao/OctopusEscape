@@ -14,10 +14,26 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private LayerMask groundLayer;
     [SerializeField]private Transform groundCheck;
-     
+
+    public enum States
+    {
+        IsGrappling,
+        None
+    }
+    [HideInInspector]public States m_state = States.None;
+
+     public static PlayerController Instance { get; private set; }
 
     // Start is called before the first frame update
     private void Awake() {
+         if (Instance != null && Instance != this) 
+        { 
+            Destroy(this); 
+        } 
+        else 
+        { 
+            Instance = this; 
+        } 
         rb = GetComponent<Rigidbody2D>();
         groundLayer = LayerMask.GetMask("Ground");    
     }
@@ -25,18 +41,33 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        if(Input.GetButtonDown("Jump") && IsGround())
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-        }
-        if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-        }
+       switch(m_state)
+       {
+            case States.None:
+            horizontal = Input.GetAxis("Horizontal");
+            if(Input.GetButtonDown("Jump") && IsGround())
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+            }
+            if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            }
+            Flip();
 
-        Flip();
+            break;
+            case States.IsGrappling:
+            break;
+       }
     }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
+        }
+    }
+
 
     private void FixedUpdate() {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
