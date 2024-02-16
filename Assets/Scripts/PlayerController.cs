@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    public bool HasJumping { get; set;}
+    public bool HasJumping { get => hasjumping; set => hasjumping = value; }
     private float speed = 10.0f;
     private float horizontal;
     private float jumpPower = 10.0f;
@@ -48,17 +48,16 @@ public class PlayerController : MonoBehaviour
        {
             case States.None:
             horizontal = Input.GetAxis("Horizontal");
-            if(Input.GetButtonDown("Jump") && (IsGround()|| HasJumping))
+            if(Input.GetButtonDown("Jump") && (IsGround()|| hasjumping))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                hasjumping = false;
             }
             if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
             {
-                hasjumping = false;
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
             Flip();
-
             break;
             case States.IsGrappling:
             horizontal = Input.GetAxis("Horizontal");

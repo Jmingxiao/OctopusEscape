@@ -64,6 +64,7 @@ public class Hook : MonoBehaviour {
         launchToPoint = !Input.GetKey(KeyCode.LeftControl);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            PlayerController.Instance.HasJumping = true;
             SetGrapplePoint();
         }
         else if (Input.GetKey(KeyCode.Mouse0))
@@ -94,16 +95,12 @@ public class Hook : MonoBehaviour {
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
             PlayerController.Instance.m_state = PlayerController.States.None;
+
         }
         else
         {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             RotateHook(mousePos, true);
-        }
-
-        if(Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            //launchToPoint = !launchToPoint;
         }
     }
 

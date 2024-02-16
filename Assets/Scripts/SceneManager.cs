@@ -21,11 +21,15 @@ public class SceneManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Level0");
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Hook");
     }
 
     public void Quit()
     {
+         #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+         #else
         Application.Quit();
+        #endif
     }
 }
