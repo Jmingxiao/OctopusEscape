@@ -103,7 +103,7 @@ public class HookRope : MonoBehaviour {
             Vector2 targetPosition = Vector2.Lerp(grapplingHook.hookPoint.position, grapplingHook.grapplePoint, delta) + offset;
             Vector2 currentPosition = Vector2.Lerp(grapplingHook.hookPoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
 
-            m_lineRenderer.SetPosition(i, currentPosition);
+            m_lineRenderer.SetPosition(i, new Vector3(currentPosition.x, currentPosition.y, 1));
         }
     }
 

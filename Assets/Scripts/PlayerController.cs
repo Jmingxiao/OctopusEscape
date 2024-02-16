@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public bool HasJumping { get => hasjumping; set => hasjumping = value; }
     private float speed = 10.0f;
     private float horizontal;
     private float jumpPower = 10.0f;
-
+    private bool hasjumping = false;
     private bool isfacingRight = true;
 
     private Rigidbody2D rb;
     private LayerMask groundLayer;
     [SerializeField]private Transform groundCheck;
+    [SerializeField] private Transform sprite;
 
     public enum States
     {
@@ -45,18 +48,20 @@ public class PlayerController : MonoBehaviour
        {
             case States.None:
             horizontal = Input.GetAxis("Horizontal");
-            if(Input.GetButtonDown("Jump") && IsGround())
+            if(Input.GetButtonDown("Jump") && (IsGround()|| hasjumping))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                hasjumping = false;
             }
             if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
             Flip();
-
             break;
             case States.IsGrappling:
+            horizontal = Input.GetAxis("Horizontal");
+            rb.AddForce(new Vector2(horizontal*0.1f, 0));
             break;
        }
     }
@@ -70,7 +75,15 @@ public class PlayerController : MonoBehaviour
 
 
     private void FixedUpdate() {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        switch(m_state)
+       {
+            case States.None:
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            break;
+            case States.IsGrappling:
+            break;
+       }
+        
     }
 
     private bool IsGround()
@@ -83,9 +96,9 @@ public class PlayerController : MonoBehaviour
         if(horizontal > 0 && !isfacingRight || horizontal < 0 && isfacingRight)
         {
             isfacingRight = !isfacingRight;
-            Vector3 theScale = transform.localScale;
+            Vector3 theScale = sprite.localScale;
             theScale.x *= -1;
-            transform.localScale = theScale;
+            sprite.localScale = theScale;
         }
     }
 
