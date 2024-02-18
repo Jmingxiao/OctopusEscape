@@ -29535,6 +29535,11 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
+--- !u!4 &1320499094 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4237067260992204227, guid: 4b47e30efa075494585517904f3b707a, type: 3}
+  m_PrefabInstance: {fileID: 968229025}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1363089720
 GameObject:
   m_ObjectHideFlags: 0
