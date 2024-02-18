@@ -21,7 +21,7 @@ public class SceneManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Hook");
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Tutorial");
     }
 
     public void Quit()
