@@ -25,7 +25,6 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        // Implement death logic here
         Destroy(gameObject);
     }
 }
