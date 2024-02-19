@@ -32,10 +32,9 @@ public class HookRope : MonoBehaviour {
         m_lineRenderer.positionCount = precision;
         waveSize = StartWaveSize;
         straightLine = false;
-
         LinePointsToFirePoint();
-
         m_lineRenderer.enabled = true;
+        
     }
 
     private void OnDisable()
@@ -73,6 +72,11 @@ public class HookRope : MonoBehaviour {
         }
         else
         {
+            if(!grapplingHook.isGrappling){
+                Debug.Log("Dropping rope");
+                grapplingHook.DropRope();
+                return;
+            }
             if (!isGrappling)
             {
                 grapplingHook.Grapple();

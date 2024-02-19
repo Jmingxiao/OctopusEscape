@@ -49,7 +49,7 @@ public class Hook : MonoBehaviour {
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
-
+    [HideInInspector]public bool isGrappling = false;
 
     private void Start()
     {
@@ -95,7 +95,6 @@ public class Hook : MonoBehaviour {
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
             PlayerController.Instance.m_state = PlayerController.States.None;
-
         }
         else
         {
@@ -133,6 +132,7 @@ public class Hook : MonoBehaviour {
                     grapplePoint = _hit.point;
                     grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
                     grappleRope.enabled = true;
+                    isGrappling =true;
                     PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
 
                     if(go.layer == 7)
@@ -140,9 +140,23 @@ public class Hook : MonoBehaviour {
                         go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 3, ForceMode2D.Impulse);
                     }
 
+                }else{
+                    ShootRope(distanceVector); 
                 }
             }
         }
+        else
+        {
+            ShootRope(distanceVector);
+        }
+    }
+
+    void ShootRope(Vector2 distanceVector){
+        isGrappling = false;
+        grapplePoint = new Vector2(hookPoint.position.x,hookPoint.position.y) +  distanceVector.normalized* maxDistance;
+        grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
+        grappleRope.enabled = true;
+        PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
     }
 
     public void Grapple()
@@ -185,6 +199,13 @@ public class Hook : MonoBehaviour {
         }
     }
 
+    public void DropRope()
+    {
+        grappleRope.enabled = false;
+        m_springJoint2D.enabled = false;
+        m_rigidbody.gravityScale = 1;
+        PlayerController.Instance.m_state = PlayerController.States.None;
+    }
     private void OnDrawGizmosSelected()
     {
         if (hookPoint != null && hasMaxDistance)

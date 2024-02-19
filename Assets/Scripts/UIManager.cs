@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public static SceneManager Instance { get; private set; }
+    public static UIManager Instance { get; private set; }
     private void Awake() 
     { 
     // If there is an instance, and it's not me, delete myself.
@@ -18,12 +18,27 @@ public class SceneManager : MonoBehaviour
             Instance = this; 
         } 
     }
+    private void OnEnable() {
+        Time.timeScale = 0;
+    }
+
+    private void OnDisable() {
+        Time.timeScale = 1;
+    }
+    public void ResumeGame()
+    {
+       gameObject.SetActive(false);
+    }
 
     public void StartNewGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Hook");
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Tutorial");
     }
 
+    public void LoadMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
+    }
     public void Quit()
     {
          #if UNITY_EDITOR
