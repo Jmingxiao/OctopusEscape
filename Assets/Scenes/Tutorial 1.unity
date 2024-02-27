@@ -673,6 +673,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &570161553 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4237067260992204227, guid: 4b47e30efa075494585517904f3b707a, type: 3}
+  m_PrefabInstance: {fileID: 968229025}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &661662152
 GameObject:
   m_ObjectHideFlags: 0
@@ -62629,6 +62634,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
+  m_Follow: {fileID: 570161553}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 16.037235
@@ -63131,7 +63137,6 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 13
-  m_Follow: {fileID: 0}
     m_Data: {fileID: 11400000, guid: 78d7453013e0484479d0bedd1b3fe7cc, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -63640,5 +63645,6 @@ SceneRoots:
   - {fileID: 661662155}
   - {fileID: 1363089722}
   - {fileID: 1029379390}
+  - {fileID: 968229025}
   - {fileID: 2122334967}
   - {fileID: 560736086}

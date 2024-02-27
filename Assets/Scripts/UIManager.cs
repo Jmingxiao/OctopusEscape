@@ -47,4 +47,8 @@ public class UIManager : MonoBehaviour
         Application.Quit();
         #endif
     }
+    public void ReloadScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
 }

@@ -61,7 +61,7 @@ public class Hook : MonoBehaviour {
 
     private void Update()
     {
-        launchToPoint = !Input.GetKey(KeyCode.LeftControl);
+        launchToPoint = !Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             PlayerController.Instance.HasJumping = true;
@@ -125,7 +125,8 @@ public class Hook : MonoBehaviour {
         {
             RaycastHit2D _hit = Physics2D.Raycast(hookPoint.position, distanceVector.normalized);
             var go = _hit.transform.gameObject;
-            if (go.layer == grappableLayerNumber || grappleToAll)
+            Debug.Log(grappableLayerNumber);
+            if (go.layer == grappableLayerNumber||go.layer == 7 || grappleToAll)
             {   
                 if (Vector2.Distance(_hit.point, hookPoint.position) <= maxDistance || !hasMaxDistance)
                 {
@@ -143,6 +144,8 @@ public class Hook : MonoBehaviour {
                 }else{
                     ShootRope(distanceVector); 
                 }
+            }else{
+                ShootRope(distanceVector);
             }
         }
         else
