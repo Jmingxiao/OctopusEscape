@@ -32,12 +32,12 @@ public class UIManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("Tutorial");
+        GameManager.Instance.LoadScene("Tutorial");
     }
 
     public void LoadMainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainMenu");
+        GameManager.Instance.LoadScene("MainMenu");
     }
     public void Quit()
     {

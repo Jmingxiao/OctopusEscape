@@ -21,15 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 822392950, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+      value: {fileID: 411345544, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
     - time: 0.21666667
-      value: {fileID: 204371426, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+      value: {fileID: 1571713303, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
     - time: 0.41666666
-      value: {fileID: 616634243, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+      value: {fileID: -1412650180, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
     - time: 0.6333333
-      value: {fileID: 1832492828, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+      value: {fileID: -157374104, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
     - time: 0.8333333
-      value: {fileID: 1825158927, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+      value: {fileID: -339851966, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -52,11 +52,11 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 822392950, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
-    - {fileID: 204371426, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
-    - {fileID: 616634243, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
-    - {fileID: 1832492828, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
-    - {fileID: 1825158927, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+    - {fileID: 411345544, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+    - {fileID: 1571713303, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+    - {fileID: -1412650180, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+    - {fileID: -157374104, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
+    - {fileID: -339851966, guid: ed682834ffe5923c59013c0a1cc92315, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
