@@ -138,7 +138,7 @@ public class Hook : MonoBehaviour {
 
                     if(go.layer == 7)
                     {     
-                        go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 3, ForceMode2D.Impulse);
+                        go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 10, ForceMode2D.Force);
                     }
 
                 }else{

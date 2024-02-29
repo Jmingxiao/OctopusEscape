@@ -8,7 +8,7 @@ public class DeadlySpick : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player"))
         {
-            UIManager.Instance.ReloadScene();
+           StartCoroutine( other.GetComponent<PlayerController>().Die());
         }
     }
 }
