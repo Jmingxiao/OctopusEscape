@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
 
         if(menu!=null){
             restart = true;
-            menu.SetActive(false);  
+            menu.SetActive(false); 
         } 
         
     }
@@ -62,6 +62,11 @@ public class GameManager : MonoBehaviour
     public void LoadScene(string sceneName)
     {
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+        restart = false;
+    }
+    public void LoadNextScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex+1);
         restart = false;
     }
     

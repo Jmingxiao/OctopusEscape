@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     public bool HasJumping { get => hasjumping; set => hasjumping = value; }
     private float speed = 10.0f;
     private float horizontal;
@@ -72,6 +71,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(new Vector2(horizontal*0.1f, 0));
             break;
             case States.IsDead:
+            rb.velocity = Vector2.zero;
             break;
        }
     }
@@ -102,6 +102,13 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("Dead");
         yield return new WaitForSeconds(1f);
         GameManager.Instance.ReloadScene();
+    }
+    public IEnumerator NextLevel()
+    {   
+        m_state = States.IsDead;
+        anim.SetTrigger("Dead");
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.LoadNextScene();
     }
 
     private bool IsGround()

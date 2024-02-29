@@ -29,7 +29,7 @@ public class Hook : MonoBehaviour {
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistance = 20;
-
+    [HideInInspector]public Transform grapPt;
     private enum LaunchType
     {
         Transform_Launch,
@@ -78,7 +78,7 @@ public class Hook : MonoBehaviour {
                 Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
                 RotateHook(mousePos, true);
             }
-
+            //ADD LAUNCH TO POINT WITH RB UPDATE
             if (launchToPoint && grappleRope.isGrappling)
             {
                 if (launchType == LaunchType.Transform_Launch)
@@ -86,7 +86,12 @@ public class Hook : MonoBehaviour {
                     Vector2 hookPointDistance = hookPoint.position - player.localPosition;
                     Vector2 targetPos = grapplePoint - hookPointDistance;
                     player.position = Vector2.Lerp(player.position, targetPos, Time.deltaTime * launchSpeed);
+                }else{
+                     m_springJoint2D.connectedAnchor = grapPt.position;
                 }
+            }else if (grappleRope.isGrappling)
+            {
+                m_springJoint2D.connectedAnchor = grapPt.position;
             }
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -135,6 +140,7 @@ public class Hook : MonoBehaviour {
                     grappleRope.enabled = true;
                     isGrappling =true;
                     PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
+                    grapPt = go.transform;
 
                     if(go.layer == 7)
                     {     
@@ -187,7 +193,6 @@ public class Hook : MonoBehaviour {
             {
                 case LaunchType.Physics_Launch:
                     m_springJoint2D.connectedAnchor = grapplePoint;
-
                     Vector2 distanceVector = hookPoint.position - player.position;
 
                     m_springJoint2D.distance = distanceVector.magnitude;
