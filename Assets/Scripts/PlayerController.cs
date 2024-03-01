@@ -5,18 +5,22 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool HasJumping { get => hasjumping; set => hasjumping = value; }
     private float speed = 10.0f;
     private float horizontal;
-    private float jumpPower = 10.0f;
-
+    private float jumpPower = 2.0f;
+    private bool hasjumping = false;
     private bool isfacingRight = true;
 
     private Rigidbody2D rb;
     private LayerMask groundLayer;
     [SerializeField]private Transform groundCheck;
+    [SerializeField] private Transform sprite;
+    [SerializeField] private Animator anim;
 
     public enum States
     {
+        IsDead,
         IsGrappling,
         None
     }
@@ -35,7 +39,8 @@ public class PlayerController : MonoBehaviour
             Instance = this; 
         } 
         rb = GetComponent<Rigidbody2D>();
-        groundLayer = LayerMask.GetMask("Ground");    
+        groundLayer = LayerMask.GetMask("Ground");
+        m_state = States.None; 
     }
 
     // Update is called once per frame
@@ -45,18 +50,28 @@ public class PlayerController : MonoBehaviour
        {
             case States.None:
             horizontal = Input.GetAxis("Horizontal");
-            if(Input.GetButtonDown("Jump") && IsGround())
+            anim.SetFloat("Speed", Mathf.Abs(horizontal));
+            if(!IsGround() && Input.GetButton("Jump"))
+            {
+                rb.AddForce(Vector2.up* jumpPower, ForceMode2D.Force);
+            }
+            /*if(Input.GetButtonDown("Jump") && (IsGround()|| hasjumping))
             {
                 rb.velocity = new Vector2(rb.velocity.x, jumpPower);
+                hasjumping = false;
             }
             if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
             {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            }
+            }*/
             Flip();
-
             break;
             case States.IsGrappling:
+            horizontal = Input.GetAxis("Horizontal");
+            rb.AddForce(new Vector2(horizontal*0.1f, 0));
+            break;
+            case States.IsDead:
+            rb.velocity = Vector2.zero;
             break;
        }
     }
@@ -70,7 +85,30 @@ public class PlayerController : MonoBehaviour
 
 
     private void FixedUpdate() {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        switch(m_state)
+       {
+            case States.None:
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            break;
+            case States.IsGrappling:
+            break;
+       }
+        
+    }
+
+    public IEnumerator Die()
+    {   
+        m_state = States.IsDead;
+        anim.SetTrigger("Dead");
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.ReloadScene();
+    }
+    public IEnumerator NextLevel()
+    {   
+        m_state = States.IsDead;
+        anim.SetTrigger("Dead");
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.LoadNextScene();
     }
 
     private bool IsGround()
@@ -83,9 +121,9 @@ public class PlayerController : MonoBehaviour
         if(horizontal > 0 && !isfacingRight || horizontal < 0 && isfacingRight)
         {
             isfacingRight = !isfacingRight;
-            Vector3 theScale = transform.localScale;
+            Vector3 theScale = sprite.localScale;
             theScale.x *= -1;
-            transform.localScale = theScale;
+            sprite.localScale = theScale;
         }
     }
 

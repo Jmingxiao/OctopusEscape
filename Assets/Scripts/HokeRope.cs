@@ -32,10 +32,9 @@ public class HookRope : MonoBehaviour {
         m_lineRenderer.positionCount = precision;
         waveSize = StartWaveSize;
         straightLine = false;
-
         LinePointsToFirePoint();
-
         m_lineRenderer.enabled = true;
+        
     }
 
     private void OnDisable()
@@ -73,6 +72,11 @@ public class HookRope : MonoBehaviour {
         }
         else
         {
+            if(!grapplingHook.isGrappling){
+                Debug.Log("Dropping rope");
+                grapplingHook.DropRope();
+                return;
+            }
             if (!isGrappling)
             {
                 grapplingHook.Grapple();
@@ -103,13 +107,14 @@ public class HookRope : MonoBehaviour {
             Vector2 targetPosition = Vector2.Lerp(grapplingHook.hookPoint.position, grapplingHook.grapplePoint, delta) + offset;
             Vector2 currentPosition = Vector2.Lerp(grapplingHook.hookPoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
 
-            m_lineRenderer.SetPosition(i, currentPosition);
+            m_lineRenderer.SetPosition(i, new Vector3(currentPosition.x, currentPosition.y, 1));
         }
     }
 
     void DrawRopeNoWaves()
     {
         m_lineRenderer.SetPosition(0, grapplingHook.hookPoint.position);
-        m_lineRenderer.SetPosition(1, grapplingHook.grapplePoint);
+        m_lineRenderer.SetPosition(1, grapplingHook.grapPt.position);
+        //m_lineRenderer.SetPosition(1, grapplingHook.grapplePoint);
     }
 }

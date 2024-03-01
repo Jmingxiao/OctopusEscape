@@ -29,7 +29,7 @@ public class Hook : MonoBehaviour {
     [Header("Distance:")]
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistance = 20;
-
+    [HideInInspector]public Transform grapPt;
     private enum LaunchType
     {
         Transform_Launch,
@@ -49,7 +49,7 @@ public class Hook : MonoBehaviour {
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
-
+    [HideInInspector]public bool isGrappling = false;
 
     private void Start()
     {
@@ -61,9 +61,10 @@ public class Hook : MonoBehaviour {
 
     private void Update()
     {
-        
+        launchToPoint = !Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            PlayerController.Instance.HasJumping = true;
             SetGrapplePoint();
         }
         else if (Input.GetKey(KeyCode.Mouse0))
@@ -77,7 +78,7 @@ public class Hook : MonoBehaviour {
                 Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
                 RotateHook(mousePos, true);
             }
-
+            //ADD LAUNCH TO POINT WITH RB UPDATE
             if (launchToPoint && grappleRope.isGrappling)
             {
                 if (launchType == LaunchType.Transform_Launch)
@@ -85,7 +86,12 @@ public class Hook : MonoBehaviour {
                     Vector2 hookPointDistance = hookPoint.position - player.localPosition;
                     Vector2 targetPos = grapplePoint - hookPointDistance;
                     player.position = Vector2.Lerp(player.position, targetPos, Time.deltaTime * launchSpeed);
+                }else{
+                     m_springJoint2D.connectedAnchor = grapPt.position;
                 }
+            }else if (grappleRope.isGrappling)
+            {
+                m_springJoint2D.connectedAnchor = grapPt.position;
             }
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -100,11 +106,6 @@ public class Hook : MonoBehaviour {
             Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
             RotateHook(mousePos, true);
         }
-
-        if(Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            launchToPoint = !launchToPoint;
-        }
     }
 
     void RotateHook(Vector3 lookPoint, bool allowRotationOverTime)
@@ -115,7 +116,6 @@ public class Hook : MonoBehaviour {
         if (rotateOverTime && allowRotationOverTime)
         {
             pivot.rotation = Quaternion.Lerp(pivot.rotation, Quaternion.AngleAxis(angle, Vector3.forward), Time.deltaTime * rotationSpeed);
-        
         }
         else
         {
@@ -130,23 +130,42 @@ public class Hook : MonoBehaviour {
         {
             RaycastHit2D _hit = Physics2D.Raycast(hookPoint.position, distanceVector.normalized);
             var go = _hit.transform.gameObject;
-            if (go.layer == grappableLayerNumber || grappleToAll)
+            Debug.Log(grappableLayerNumber);
+            if (go.layer == grappableLayerNumber||go.layer == 7 || grappleToAll)
             {   
                 if (Vector2.Distance(_hit.point, hookPoint.position) <= maxDistance || !hasMaxDistance)
                 {
                     grapplePoint = _hit.point;
                     grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
                     grappleRope.enabled = true;
+                    isGrappling =true;
                     PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
+                    grapPt = go.transform;
 
                     if(go.layer == 7)
                     {     
-                        go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 3, ForceMode2D.Impulse);
+                        go.GetComponent<Rigidbody2D>().AddForce(-grappleDistanceVector.normalized * 10, ForceMode2D.Force);
                     }
 
+                }else{
+                    ShootRope(distanceVector); 
                 }
+            }else{
+                ShootRope(distanceVector);
             }
         }
+        else
+        {
+            ShootRope(distanceVector);
+        }
+    }
+
+    void ShootRope(Vector2 distanceVector){
+        isGrappling = false;
+        grapplePoint = new Vector2(hookPoint.position.x,hookPoint.position.y) +  distanceVector.normalized* maxDistance;
+        grappleDistanceVector = grapplePoint - (Vector2)pivot.position;
+        grappleRope.enabled = true;
+        PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
     }
 
     public void Grapple()
@@ -174,7 +193,6 @@ public class Hook : MonoBehaviour {
             {
                 case LaunchType.Physics_Launch:
                     m_springJoint2D.connectedAnchor = grapplePoint;
-
                     Vector2 distanceVector = hookPoint.position - player.position;
 
                     m_springJoint2D.distance = distanceVector.magnitude;
@@ -189,6 +207,13 @@ public class Hook : MonoBehaviour {
         }
     }
 
+    public void DropRope()
+    {
+        grappleRope.enabled = false;
+        m_springJoint2D.enabled = false;
+        m_rigidbody.gravityScale = 1;
+        PlayerController.Instance.m_state = PlayerController.States.None;
+    }
     private void OnDrawGizmosSelected()
     {
         if (hookPoint != null && hasMaxDistance)
