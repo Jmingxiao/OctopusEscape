@@ -5,29 +5,31 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
-    private void Awake() 
-    { 
-    // If there is an instance, and it's not me, delete myself.
-    
-        if (Instance != null && Instance != this) 
-        { 
-            Destroy(this); 
-        } 
-        else 
-        { 
-            Instance = this; 
-        } 
+    private void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
-    private void OnEnable() {
+    private void OnEnable()
+    {
         Time.timeScale = 0;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         Time.timeScale = 1;
     }
     public void ResumeGame()
     {
-       gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void StartNewGame()
@@ -39,12 +41,25 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.LoadScene("MainMenu");
     }
+    public void LoadLevelMenu()
+    {
+        // Why is this not working?
+        GameManager.Instance.LoadScene("LevelMenu");
+    }
+    public void LoadLevelOne()
+    {
+        GameManager.Instance.LoadScene("Level1");
+    }
+    public void LoadLevelTwo()
+    {
+        GameManager.Instance.LoadScene("Level2");
+    }
     public void Quit()
     {
-         #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-         #else
+#else
         Application.Quit();
-        #endif
+#endif
     }
 }
