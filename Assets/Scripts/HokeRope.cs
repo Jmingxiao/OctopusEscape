@@ -114,7 +114,9 @@ public class HookRope : MonoBehaviour {
     void DrawRopeNoWaves()
     {
         m_lineRenderer.SetPosition(0, grapplingHook.hookPoint.position);
-        m_lineRenderer.SetPosition(1, grapplingHook.grapPt.position);
-        //m_lineRenderer.SetPosition(1, grapplingHook.grapplePoint);
+        if(grapplingHook.dynamicGrapple){
+            grapplingHook.grapplePoint = grapplingHook.grapPt.position;
+        }
+        m_lineRenderer.SetPosition(1, grapplingHook.grapplePoint);
     }
 }

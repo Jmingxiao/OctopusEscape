@@ -30,6 +30,7 @@ public class Hook : MonoBehaviour {
     [SerializeField] private bool hasMaxDistance = false;
     [SerializeField] private float maxDistance = 20;
     [HideInInspector]public Transform grapPt;
+    [HideInInspector]public bool dynamicGrapple = false;
     private enum LaunchType
     {
         Transform_Launch,
@@ -86,10 +87,10 @@ public class Hook : MonoBehaviour {
                     Vector2 hookPointDistance = hookPoint.position - player.localPosition;
                     Vector2 targetPos = grapplePoint - hookPointDistance;
                     player.position = Vector2.Lerp(player.position, targetPos, Time.deltaTime * launchSpeed);
-                }else{
+                }else if(dynamicGrapple){
                      m_springJoint2D.connectedAnchor = grapPt.position;
                 }
-            }else if (grappleRope.isGrappling)
+            }else if (grappleRope.isGrappling&&dynamicGrapple)
             {
                 m_springJoint2D.connectedAnchor = grapPt.position;
             }
@@ -141,6 +142,7 @@ public class Hook : MonoBehaviour {
                     isGrappling =true;
                     PlayerController.Instance.m_state = PlayerController.States.IsGrappling; 
                     grapPt = go.transform;
+                    dynamicGrapple = go.layer == 7; 
 
                     if(go.layer == 7)
                     {     
