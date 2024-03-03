@@ -255,7 +255,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4382494845352549737}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: Quit
         m_Mode: 1
@@ -522,7 +522,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4382494845352549737}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: LoadMainMenu
         m_Mode: 1
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4382494845352549737}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ReloadScene
         m_Mode: 1
@@ -1202,7 +1202,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4017296901463957347}
   - component: {fileID: 6702004360552233316}
-  - component: {fileID: 4382494845352549737}
   - component: {fileID: 7502580394427162592}
   m_Layer: 5
   m_Name: PauseMenu
@@ -1243,18 +1242,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9150856120349562061}
   m_CullTransparentMesh: 1
---- !u!114 &4382494845352549737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9150856120349562061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 365470d5a79a29d45870bcd1b50cb943, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7502580394427162592
 MonoBehaviour:
   m_ObjectHideFlags: 0

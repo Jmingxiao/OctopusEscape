@@ -22,12 +22,17 @@ public class GameManager : MonoBehaviour
     static bool restart =false;
     public GameObject menu;
     public GameObject Startscreen;
+    [SerializeField]private GameObject tips;
+    float tipstime = 10.0f;
     // Start is called before the first frame update
     void Start()
     {
         
-        if(!restart)
-            StartCoroutine(showTips());
+        if(!restart){
+            Startscreen.SetActive(true);
+            if(tips!=null)
+                tips.SetActive(true);
+        }
         else
             Startscreen.SetActive(false);
 
@@ -36,22 +41,24 @@ public class GameManager : MonoBehaviour
             menu.SetActive(false); 
         } 
         
+        
     }
-    public IEnumerator showTips()
-    {
-        if(tips!=null){
-        tips?.SetActive(true);
-        yield return new WaitForSeconds(3);
-        tips?.SetActive(false);
-        }
-    }
-    
-    [SerializeField]private GameObject tips;
     // Update is called once per frame
     void Update()
     {
+        if(tips!=null&&tipstime<=0){
+            tips.SetActive(false);
+        }else{
+            tipstime -= Time.deltaTime;
+        }
+
         if(Input.GetKeyDown(KeyCode.Escape) )
+        {
             menu.SetActive(!menu.activeSelf);
+            if(tips!=null&&tipstime<=0){
+                tips.SetActive(!tips.activeSelf);
+            }
+        }
         if(Input.GetKeyDown(KeyCode.R))
            GameManager.Instance.ReloadScene();
     }

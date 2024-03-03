@@ -3,33 +3,40 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class Portal : MonoBehaviour
 {
-    public TilemapRenderer cover;
+    public Transform cover;
+    Vector2 oldpos;
     BoxCollider2D box;
     Animator anim;
     bool firsttime = true;
     bool activated = false;
     private void Start() {
+        oldpos = cover.position;
         anim = GetComponent<Animator>();
         box = GetComponent<BoxCollider2D>();
         anim.enabled = false;
     }
+
+
+    private void Update() {
+        if((cover.position.x> oldpos.x+3f||cover.position.x< oldpos.x-3f)&&firsttime)
+        {
+            firsttime = false;
+            StartCoroutine(Openportal());
+        }
+     
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.CompareTag("Player"))
         {
-            if(firsttime)
-            {
-                cover.enabled = false;
-                StartCoroutine(Openportal());
-            }
-            else if(activated)
+            if(activated)
             {
                 anim.SetTrigger("Close");
                 StartCoroutine(PlayerController.Instance.NextLevel());
             }
-            firsttime =false;
         }
     }
 

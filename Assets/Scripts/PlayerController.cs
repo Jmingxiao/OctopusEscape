@@ -8,15 +8,17 @@ public class PlayerController : MonoBehaviour
     public bool HasJumping { get => hasjumping; set => hasjumping = value; }
     private float speed = 10.0f;
     private float horizontal;
-    private float jumpPower = 2.0f;
     private bool hasjumping = false;
     private bool isfacingRight = true;
-
+    private float score = 0;
+    public float GetScore { get => score; }
+    public void AddScore(float value){ score += value; }
     private Rigidbody2D rb;
     private LayerMask groundLayer;
     [SerializeField]private Transform groundCheck;
     [SerializeField] private Transform sprite;
     [SerializeField] private Animator anim;
+    [SerializeField] private float gravityScale = 3f;
 
     public enum States
     {
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     }
     [HideInInspector]public States m_state = States.None;
 
-     public static PlayerController Instance { get; private set; }
+    public static PlayerController Instance { get; private set; }
 
     // Start is called before the first frame update
     private void Awake() {
@@ -46,34 +48,29 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       switch(m_state)
-       {
+        switch(m_state)
+        {
             case States.None:
+            rb.gravityScale = gravityScale;
             horizontal = Input.GetAxis("Horizontal");
             anim.SetFloat("Speed", Mathf.Abs(horizontal));
-            if(!IsGround() && Input.GetButton("Jump"))
+            bool isgliding = Input.GetButton("Jump");
+            anim.SetBool("Gliding", isgliding );
+            if(!IsGround() && isgliding)
             {
-                rb.AddForce(Vector2.up* jumpPower, ForceMode2D.Force);
+                rb.gravityScale = 0.5f;
             }
-            /*if(Input.GetButtonDown("Jump") && (IsGround()|| hasjumping))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-                hasjumping = false;
-            }
-            if(Input.GetButtonUp("Jump") && rb.velocity.y > 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
-            }*/
             Flip();
             break;
             case States.IsGrappling:
+            rb.gravityScale = gravityScale;
             horizontal = Input.GetAxis("Horizontal");
             rb.AddForce(new Vector2(horizontal*0.1f, 0));
             break;
             case States.IsDead:
             rb.velocity = Vector2.zero;
             break;
-       }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
