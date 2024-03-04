@@ -122,6 +122,14 @@ public class PlayerController : MonoBehaviour
         GameManager.Instance.LoadNextScene();
     }
 
+    public IEnumerator EndGame()
+    {
+        m_state = States.IsDead;
+        anim.SetTrigger("Dead");
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.LoadScene("EndScene");
+    }
+
     private bool IsGround()
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);

@@ -14,7 +14,7 @@ public class PortalBase : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             anim.SetTrigger("Close");
-            StartCoroutine(PlayerController.Instance.NextLevel());
+            StartCoroutine(PlayerController.Instance.EndGame());
         }
     }
 }

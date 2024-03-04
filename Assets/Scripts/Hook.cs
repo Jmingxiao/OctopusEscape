@@ -52,12 +52,15 @@ public class Hook : MonoBehaviour {
 
     [HideInInspector]public bool isGrappling = false;
 
+    AudioSource audio;
+
     private void Start()
     {
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         hookPoint = gameObject.transform;
         player = pivot.parent;
+        audio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -65,6 +68,7 @@ public class Hook : MonoBehaviour {
         launchToPoint = !Input.GetKey(KeyCode.LeftShift);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            audio.Play();
             PlayerController.Instance.HasJumping = true;
             SetGrapplePoint();
         }
@@ -97,7 +101,7 @@ public class Hook : MonoBehaviour {
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            GetComponent<AudioSource>().Play();
+           
             grappleRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
