@@ -7,9 +7,6 @@ public class MovingPlatform : MonoBehaviour
 {
 
     private void Start() {
-        transform.DOMoveY(transform.position.y-10, 4).SetLoops(-1, LoopType.Yoyo);
+        transform.DOMoveY(transform.position.y-9, 4).SetLoops(-1, LoopType.Yoyo);
     }
-   private void Update() {
-       
-   }
 }
