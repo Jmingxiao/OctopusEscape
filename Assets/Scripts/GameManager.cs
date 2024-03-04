@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
     {
         
         if(!restart){
-            Startscreen.SetActive(true);
             if(tips!=null)
                 tips.SetActive(true);
         }
@@ -60,7 +59,7 @@ public class GameManager : MonoBehaviour
             }
         }
         if(Input.GetKeyDown(KeyCode.R))
-           GameManager.Instance.ReloadScene();
+           ReloadScene();
     }
     public void ReloadScene()
     {
@@ -76,5 +75,4 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex+1);
         restart = false;
     }
-    
 }

@@ -48,15 +48,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        bool isgliding =false;
         switch(m_state)
         {
             case States.None:
             rb.gravityScale = gravityScale;
             horizontal = Input.GetAxis("Horizontal");
             anim.SetFloat("Speed", Mathf.Abs(horizontal));
-            bool isgliding = Input.GetButton("Jump");
-            anim.SetBool("Gliding", isgliding );
-            if(!IsGround() && isgliding)
+            isgliding = !IsGround()&&Input.GetButton("Jump");
+            if(isgliding)
             {
                 rb.gravityScale = 0.5f;
             }
@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero;
             break;
         }
+        anim.SetBool("Gliding", isgliding);
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -110,7 +111,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGround()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, 0.3f, groundLayer);
     }
 
     private void Flip()
