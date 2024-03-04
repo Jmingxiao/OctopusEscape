@@ -131,7 +131,6 @@ public class Hook : MonoBehaviour {
         {
             RaycastHit2D _hit = Physics2D.Raycast(hookPoint.position, distanceVector.normalized);
             var go = _hit.transform.gameObject;
-            Debug.Log(grappableLayerNumber);
             if (go.layer == grappableLayerNumber||go.layer == 7 || grappleToAll)
             {   
                 if (Vector2.Distance(_hit.point, hookPoint.position) <= maxDistance || !hasMaxDistance)

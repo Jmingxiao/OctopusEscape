@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -19,11 +20,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform sprite;
     [SerializeField] private Animator anim;
     [SerializeField] private float gravityScale = 3f;
-
+    [HideInInspector] public float glidingCooldown;
     public enum States
     {
         IsDead,
         IsGrappling,
+        IsGliding,
         None
     }
     [HideInInspector]public States m_state = States.None;
@@ -55,10 +57,13 @@ public class PlayerController : MonoBehaviour
             rb.gravityScale = gravityScale;
             horizontal = Input.GetAxis("Horizontal");
             anim.SetFloat("Speed", Mathf.Abs(horizontal));
-            isgliding = !IsGround()&&Input.GetButton("Jump");
-            if(isgliding)
+            isgliding = Input.GetButton("Jump")&&rb.velocity.y<0.1f&&!IsGround();
+            if(isgliding&&glidingCooldown>0.3f)
             {
                 rb.gravityScale = 0.5f;
+                rb.velocity = new Vector2(rb.velocity.x, -1f);
+            }else{
+                rb.gravityScale = gravityScale;
             }
             Flip();
             break;
@@ -71,7 +76,15 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero;
             break;
         }
-        anim.SetBool("Gliding", isgliding);
+        if(isgliding&&glidingCooldown>0.0f)
+        {
+            glidingCooldown -= glidingCooldown<-0.01f?0:Time.deltaTime*0.5f;
+        }
+        else
+        {
+            glidingCooldown += glidingCooldown>1f?0:Time.deltaTime*3f;
+        }
+        anim.SetBool("Gliding", isgliding&&glidingCooldown>0.3f);
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

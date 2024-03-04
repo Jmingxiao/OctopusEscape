@@ -29,7 +29,7 @@ public class UITips : MonoBehaviour
         float timer = 1.5f;
         while (timer > 0)
         {
-            grappingTilemap.color =  Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time, 1));
+            grappingTilemap.color =  Color.Lerp(Color.white, Color.red, Mathf.PingPong(Time.time, 1));
             timer -= Time.deltaTime;
             yield return null;
         }
