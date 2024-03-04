@@ -97,6 +97,7 @@ public class Hook : MonoBehaviour {
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
         {
+            GetComponent<AudioSource>().Play();
             grappleRope.enabled = false;
             m_springJoint2D.enabled = false;
             m_rigidbody.gravityScale = 1;
